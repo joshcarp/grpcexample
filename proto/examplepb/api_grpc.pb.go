@@ -8,6 +8,7 @@ package examplepb
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -51,8 +52,7 @@ type FooAPIServer interface {
 }
 
 // UnimplementedFooAPIServer must be embedded to have forward compatible implementations.
-type UnimplementedFooAPIServer struct {
-}
+type UnimplementedFooAPIServer struct{}
 
 func (UnimplementedFooAPIServer) Hello(context.Context, *ExampleRequest) (*ExampleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Hello not implemented")
@@ -137,8 +137,7 @@ type BarAPIServer interface {
 }
 
 // UnimplementedBarAPIServer must be embedded to have forward compatible implementations.
-type UnimplementedBarAPIServer struct {
-}
+type UnimplementedBarAPIServer struct{}
 
 func (UnimplementedBarAPIServer) ListBars(context.Context, *BarRequest) (*BarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBars not implemented")

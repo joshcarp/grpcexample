@@ -7,10 +7,11 @@
 package examplepb
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -252,13 +253,16 @@ func file_api_proto_rawDescGZIP() []byte {
 	return file_api_proto_rawDescData
 }
 
-var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_api_proto_goTypes = []interface{}{
-	(*BarRequest)(nil),      // 0: example.BarRequest
-	(*BarResponse)(nil),     // 1: example.BarResponse
-	(*ExampleRequest)(nil),  // 2: example.exampleRequest
-	(*ExampleResponse)(nil), // 3: example.exampleResponse
-}
+var (
+	file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+	file_api_proto_goTypes  = []interface{}{
+		(*BarRequest)(nil),      // 0: example.BarRequest
+		(*BarResponse)(nil),     // 1: example.BarResponse
+		(*ExampleRequest)(nil),  // 2: example.exampleRequest
+		(*ExampleResponse)(nil), // 3: example.exampleResponse
+	}
+)
+
 var file_api_proto_depIdxs = []int32{
 	2, // 0: example.FooAPI.Hello:input_type -> example.exampleRequest
 	0, // 1: example.BarAPI.ListBars:input_type -> example.BarRequest
