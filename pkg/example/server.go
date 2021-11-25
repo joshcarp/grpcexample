@@ -4,12 +4,14 @@ import (
 	"context"
 	"crypto/x509"
 	"fmt"
+	"net"
+	"time"
+
 	"github.com/googleapis/gax-go/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
-	"net"
-	"time"
 
 	"github.com/joshcarp/grpcexample/proto/examplepb"
 )
@@ -19,8 +21,9 @@ type FooServer struct {
 }
 
 func (f FooServer) Hello(ctx context.Context, example *examplepb.ExampleRequest) (*examplepb.ExampleResponse, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
 	return &examplepb.ExampleResponse{
-		Message: "Hello " + example.Message,
+		Message: fmt.Sprintf("Incoming Message: %s \n Metadata: %s", example.Message, md),
 	}, nil
 }
 
@@ -29,15 +32,14 @@ type BarServer struct {
 }
 
 func (f BarServer) ListBars(ctx context.Context, example *examplepb.BarRequest) (*examplepb.BarResponse, error) {
-	fmt.Println(example)
+	md, _ := metadata.FromIncomingContext(ctx)
 	return &examplepb.BarResponse{
-		Message: "Barserver " + example.Message,
+		Message: fmt.Sprintf("Incoming Message: %s \n Metadata: %s", example.Message, md),
 	}, nil
 }
 
-
 /* Serve servers a servermock server and blocks until the server is running. Use context.WithCancel to stop the server */
-func Serve(ctx context.Context, addr string, r ... func(*grpc.Server)) error {
+func Serve(ctx context.Context, addr string, r ...func(*grpc.Server)) error {
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
@@ -45,7 +47,7 @@ func Serve(ctx context.Context, addr string, r ... func(*grpc.Server)) error {
 	return ServeLis(ctx, ln, r...)
 }
 
-func ServeLis(ctx context.Context, ln net.Listener, r ... func(*grpc.Server)) error {
+func ServeLis(ctx context.Context, ln net.Listener, r ...func(*grpc.Server)) error {
 	srv := grpc.NewServer()
 	for _, rr := range r {
 		rr(srv)
@@ -77,14 +79,13 @@ func ServeLis(ctx context.Context, ln net.Listener, r ... func(*grpc.Server)) er
 	}
 }
 
-func ServeRand(ctx context.Context, r ... func(*grpc.Server)) (int, error) {
+func ServeRand(ctx context.Context, r ...func(*grpc.Server)) (int, error) {
 	ln, err := net.Listen("tcp", ":0")
 	if err != nil {
 		panic(err)
 	}
 	return ln.Addr().(*net.TCPAddr).Port, ServeLis(ctx, ln, r...)
 }
-
 
 func setup(ctx context.Context, plaintext bool, targetURL string) (*grpc.ClientConn, error) {
 	opts := []grpc.DialOption{

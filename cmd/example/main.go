@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+	"net"
+
 	"github.com/joshcarp/grpcexample/pkg/example"
 	"github.com/joshcarp/grpcexample/proto/examplepb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"log"
-	"net"
 )
 
 func main() {
